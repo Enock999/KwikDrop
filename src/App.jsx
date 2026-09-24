@@ -4,7 +4,7 @@ import { ArrowRight, ArrowUpRight, BadgeCheck, ChevronDown, ChevronLeft, Heart, 
 const WHATSAPP_NUMBER = '27821234567';
 const money = (value) => `R${value.toLocaleString('en-ZA')}`;
 const chatUrl = (message) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-const routeHref = (hash='') => `${import.meta.env.BASE_URL}index.html${hash ? `#${hash}` : ''}`;
+const routeHref = (hash='') => `${window.location.pathname}${hash ? `#${hash}` : ''}`;
 const categories = ['All products','Tech','Home','Everyday'];
 const products = [
   { id:'aroma-diffuser', name:'Halo Mist Diffuser', category:'Home', price:349, label:'Popular pick', intro:'Soft light. Quiet mist. A better-feeling room.', description:'A compact aroma diffuser for bedrooms, living rooms and work spaces. Stock and colour are confirmed with you before delivery.', features:['Quiet mist output','Soft ambient LED light','Compact everyday size'], image:'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=1400&q=88', thumbs:['https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=1400&q=88','https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1400&q=88','https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&w=1400&q=88'] },
@@ -23,8 +23,9 @@ export default function App() {
   const [category,setCategory] = useState('All products');
   const [orderProduct,setOrderProduct] = useState(null);
   useEffect(() => { const handler=()=>setRoute(window.location.hash); window.addEventListener('hashchange',handler); return()=>window.removeEventListener('hashchange',handler); },[]);
+  useEffect(() => { const handler=(event) => { const anchor=event.target.closest?.('a[href]'); if (!anchor) return; const url=new URL(anchor.href, window.location.href); if (url.origin !== window.location.origin || !url.hash) return; event.preventDefault(); window.history.pushState({},'',`${window.location.pathname}${url.hash}`); setRoute(url.hash); setMenuOpen(false); setSearchOpen(false); }; document.addEventListener('click',handler); return()=>document.removeEventListener('click',handler); },[]);
   useEffect(() => window.scrollTo({ top:0, behavior:'instant' }),[route]);
-  const go = (hash='') => { const next = hash ? `#${hash}` : ''; setMenuOpen(false); setSearchOpen(false); if (window.location.hash === next) { setRoute(next); return; } window.location.assign(`${window.location.pathname}${next}`); };
+  const go = (hash='') => { const next = hash ? `#${hash}` : ''; setMenuOpen(false); setSearchOpen(false); window.history.pushState({},'',`${window.location.pathname}${next}`); setRoute(next); };
   const currentProduct = route.startsWith('#product/') ? products.find((p)=>p.id===route.slice(9)) : null;
   const requestedPage = route.slice(1) || 'home';
   const page = currentProduct ? 'product' : (requestedPage.startsWith('product/') ? 'shop' : requestedPage);
