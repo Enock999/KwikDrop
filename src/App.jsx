@@ -24,7 +24,7 @@ export default function App() {
   const [orderProduct,setOrderProduct] = useState(null);
   useEffect(() => { const handler=()=>setRoute(window.location.hash); window.addEventListener('hashchange',handler); return()=>window.removeEventListener('hashchange',handler); },[]);
   useEffect(() => { const handler=(event) => { const anchor=event.target.closest?.('a[href]'); if (!anchor) return; const url=new URL(anchor.href, window.location.href); if (url.origin !== window.location.origin || !url.hash) return; event.preventDefault(); window.history.pushState({},'',`${window.location.pathname}${url.hash}`); setRoute(url.hash); setMenuOpen(false); setSearchOpen(false); }; document.addEventListener('click',handler); return()=>document.removeEventListener('click',handler); },[]);
-  useEffect(() => window.scrollTo({ top:0, behavior:'instant' }),[route]);
+  useEffect(() => { window.scrollTo({ top:0, behavior:'instant' }); },[route]);
   const go = (hash='') => { const next = hash ? `#${hash}` : ''; setMenuOpen(false); setSearchOpen(false); window.history.pushState({},'',`${window.location.pathname}${next}`); setRoute(next); };
   const currentProduct = route.startsWith('#product/') ? products.find((p)=>p.id===route.slice(9)) : null;
   const requestedPage = route.slice(1) || 'home';
