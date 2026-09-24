@@ -25,3 +25,10 @@
 @keyframes galleryIn{from{opacity:1;transform:translateX(-18px) scale(.99)}to{opacity:1;transform:none}}
 @keyframes detailIn{from{opacity:1;transform:translateY(12px)}to{opacity:1;transform:none}}
 @keyframes cardReveal{from{opacity:1;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+/* Interaction stability: decorative motion runs once, then rests. */
+.hero-bg{animation:heroDrift 14s var(--ease) 1 alternate both}
+.hero-product-card{animation:cardFloat 4s var(--ease) 1 both}
+.arrow-down{animation:scrollPulse 1.7s ease-in-out 2 both}
+.orbit-ring{animation:orbitSpin 18s linear 1 both}
+.shop-orbit-card{animation:shopCardFloat 5s ease-in-out 1 both}
